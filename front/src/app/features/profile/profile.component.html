@@ -1,0 +1,39 @@
+<div class="profile" *ngIf="!isLoading">
+
+  <section class="profile__info">
+    <h1 class="profile__title">Mon profil</h1>
+    <div *ngIf="user" class="profile__fields">
+      <div class="profile__field">
+        <span class="profile__label">Nom d'utilisateur</span>
+        <span class="profile__value">{{ user.username }}</span>
+      </div>
+      <div class="profile__field">
+        <span class="profile__label">Email</span>
+        <span class="profile__value">{{ user.email }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="profile__subscriptions">
+    <h2 class="profile__subtitle">Mes abonnements</h2>
+
+    <p *ngIf="subscriptions.length === 0" class="profile__empty">
+      Vous n'êtes abonné à aucun thème pour le moment.
+    </p>
+
+    <ul *ngIf="subscriptions.length > 0" class="profile__topic-list">
+      <li *ngFor="let topic of subscriptions" class="profile__topic-item">
+        <div class="profile__topic-info">
+          <span class="profile__topic-name">{{ topic.name }}</span>
+          <span class="profile__topic-desc">{{ topic.description }}</span>
+        </div>
+        <button mat-stroked-button color="warn" (click)="onUnsubscribe(topic)">
+          Se désabonner
+        </button>
+      </li>
+    </ul>
+  </section>
+
+</div>
+
+<div *ngIf="isLoading" class="profile__loading">Chargement…</div>

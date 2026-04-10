@@ -1,0 +1,40 @@
+<div class="login-page">
+  <div class="login-card">
+    <img class="login-card__logo" src="/assets/logo_p6.png" alt="Monde De Dev" />
+    <h1 class="login-card__title">Se connecter</h1>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="login-card__form">
+
+      <!-- Identifier (email or username) -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email ou nom d'utilisateur</mat-label>
+        <input matInput formControlName="identifier" autocomplete="username" />
+        <mat-error *ngIf="identifier.hasError('required')">Ce champ est requis</mat-error>
+      </mat-form-field>
+
+      <!-- Password -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput type="password" formControlName="password" autocomplete="current-password" />
+        <mat-error *ngIf="password.hasError('required')">Le mot de passe est requis</mat-error>
+      </mat-form-field>
+
+      <!-- Server error -->
+      <p class="login-card__error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="full-width"
+        [disabled]="isLoading">
+        {{ isLoading ? 'Connexion...' : 'Se connecter' }}
+      </button>
+
+    </form>
+
+    <p class="login-card__register-link">
+      Pas encore de compte ? <a routerLink="/register">S'inscrire</a>
+    </p>
+  </div>
+</div>

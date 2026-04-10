@@ -1,0 +1,42 @@
+<div class="write">
+  <h1 class="write__title">Écrire un article</h1>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="write__form">
+
+    <mat-form-field appearance="outline" class="write__field">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="title" placeholder="Titre de l'article" />
+      <mat-error *ngIf="title.hasError('required')">Le titre est requis</mat-error>
+      <mat-error *ngIf="title.hasError('minlength')">Minimum 3 caractères</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="write__field">
+      <mat-label>Thème</mat-label>
+      <mat-select formControlName="topicId">
+        <mat-option *ngFor="let topic of topics" [value]="topic.id">
+          {{ topic.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="topicId.hasError('required')">Le thème est requis</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="write__field">
+      <mat-label>Contenu</mat-label>
+      <textarea
+        matInput
+        formControlName="content"
+        placeholder="Contenu de l'article"
+        rows="12"
+      ></textarea>
+      <mat-error *ngIf="content.hasError('required')">Le contenu est requis</mat-error>
+      <mat-error *ngIf="content.hasError('minlength')">Minimum 10 caractères</mat-error>
+    </mat-form-field>
+
+    <div class="write__actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+        Publier
+      </button>
+    </div>
+
+  </form>
+</div>

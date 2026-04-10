@@ -1,5 +1,11 @@
-<div class="center">
-  <img src="/assets/logo_p6.png" alt="logo" />
-  <h1>Welcome to MDD</h1>
-  <button mat-raised-button color="primary" (click)="start()">Commencer</button>
+<div class="landing">
+  <div class="landing__content">
+    <img class="landing__logo" src="/assets/logo_p6.png" alt="Monde De Dev logo" />
+    <h1 class="landing__title">Monde De Dev</h1>
+    <p class="landing__subtitle">Le réseau social des développeurs</p>
+    <div class="landing__actions">
+      <button mat-stroked-button color="primary" routerLink="/login">Se connecter</button>
+      <button mat-raised-button color="primary" routerLink="/register">S'inscrire</button>
+    </div>
+  </div>
 </div>

@@ -1,0 +1,54 @@
+.themes {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 24px;
+
+  &__title {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #3f51b5;
+    margin-bottom: 32px;
+  }
+
+  &__loading,
+  &__empty {
+    color: #666;
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  &__card-name {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+
+  &__card-description {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+    flex: 1;
+    line-height: 1.5;
+  }
+
+  &__card-btn {
+    align-self: flex-start;
+  }
+}

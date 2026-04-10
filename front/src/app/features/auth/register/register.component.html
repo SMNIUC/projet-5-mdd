@@ -1,0 +1,51 @@
+<div class="register-page">
+  <div class="register-card">
+    <img class="register-card__logo" src="/assets/logo_p6.png" alt="Monde De Dev" />
+    <h1 class="register-card__title">Créer un compte</h1>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="register-card__form">
+
+      <!-- Email -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" />
+        <mat-error *ngIf="email.hasError('required')">L'email est requis</mat-error>
+        <mat-error *ngIf="email.hasError('email')">Format d'email invalide</mat-error>
+        <mat-error *ngIf="serverErrors['email']">{{ serverErrors['email'] }}</mat-error>
+      </mat-form-field>
+
+      <!-- Username -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom d'utilisateur</mat-label>
+        <input matInput formControlName="username" autocomplete="username" />
+        <mat-error *ngIf="username.hasError('required')">Le nom d'utilisateur est requis</mat-error>
+        <mat-error *ngIf="username.hasError('minlength')">Minimum 3 caractères</mat-error>
+        <mat-error *ngIf="serverErrors['username']">{{ serverErrors['username'] }}</mat-error>
+      </mat-form-field>
+
+      <!-- Password -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput type="password" formControlName="password" autocomplete="new-password" />
+        <mat-error *ngIf="password.hasError('required')">Le mot de passe est requis</mat-error>
+        <mat-error *ngIf="password.hasError('pattern')">
+          8 caractères min, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
+        </mat-error>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="full-width"
+        [disabled]="isLoading">
+        {{ isLoading ? 'Inscription...' : "S'inscrire" }}
+      </button>
+
+    </form>
+
+    <p class="register-card__login-link">
+      Déjà un compte ? <a routerLink="/login">Se connecter</a>
+    </p>
+  </div>
+</div>

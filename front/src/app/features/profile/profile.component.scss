@@ -1,0 +1,93 @@
+.profile {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  &__loading {
+    color: #666;
+    text-align: center;
+    margin-top: 60px;
+  }
+
+  &__title {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #3f51b5;
+    margin: 0 0 24px;
+  }
+
+  &__subtitle {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #1a1a2e;
+    margin: 0 0 16px;
+  }
+
+  &__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #888;
+  }
+
+  &__value {
+    font-size: 1rem;
+    color: #1a1a2e;
+  }
+
+  &__empty {
+    color: #666;
+  }
+
+  &__topic-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__topic-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  }
+
+  &__topic-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__topic-name {
+    font-weight: 600;
+    color: #1a1a2e;
+  }
+
+  &__topic-desc {
+    font-size: 0.85rem;
+    color: #666;
+  }
+}

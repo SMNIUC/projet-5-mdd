@@ -1,0 +1,25 @@
+<div class="themes">
+  <h1 class="themes__title">Thèmes</h1>
+
+  <div *ngIf="isLoading" class="themes__loading">Chargement…</div>
+
+  <div *ngIf="!isLoading && topics.length === 0" class="themes__empty">
+    Aucun thème disponible pour le moment.
+  </div>
+
+  <div *ngIf="!isLoading && topics.length > 0" class="themes__grid">
+    <div *ngFor="let topic of topics" class="themes__card">
+      <h2 class="themes__card-name">{{ topic.name }}</h2>
+      <p class="themes__card-description">{{ topic.description }}</p>
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="topic.subscribed"
+        (click)="onSubscribe(topic)"
+        class="themes__card-btn"
+      >
+        {{ topic.subscribed ? 'Déjà abonné' : "S'abonner" }}
+      </button>
+    </div>
+  </div>
+</div>

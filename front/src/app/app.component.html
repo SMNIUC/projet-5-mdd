@@ -1,1 +1,11 @@
+<header *ngIf="isLoggedIn$ | async" class="app-header">
+  <span class="app-header__brand">Monde De Dev</span>
+  <nav class="app-header__nav">
+    <a mat-button routerLink="/feed" routerLinkActive="app-header__nav-link--active">Articles</a>
+    <a mat-button routerLink="/write" routerLinkActive="app-header__nav-link--active">Écrire</a>
+    <a mat-button routerLink="/themes" routerLinkActive="app-header__nav-link--active">Thèmes</a>
+    <a mat-button routerLink="/profile" routerLinkActive="app-header__nav-link--active">Profil</a>
+  </nav>
+  <button mat-stroked-button (click)="onLogout()">Se déconnecter</button>
+</header>
 <router-outlet></router-outlet>
