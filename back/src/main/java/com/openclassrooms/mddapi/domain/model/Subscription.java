@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "subscriptions",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "topic_id"}))
+       uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "topic_id"}), schema = "mdddb")
 @Data
 @Builder
 @NoArgsConstructor
