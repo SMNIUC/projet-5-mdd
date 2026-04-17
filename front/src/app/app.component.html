@@ -1,6 +1,7 @@
+<a class="skip-link" href="#main-content">Aller au contenu principal</a>
 <header *ngIf="isLoggedIn$ | async" class="app-header">
-  <span class="app-header__brand">Monde De Dev</span>
-  <nav class="app-header__nav">
+  <a class="app-header__brand" routerLink="/feed">Monde De Dev</a>
+  <nav class="app-header__nav" aria-label="Navigation principale">
     <a mat-button routerLink="/feed" routerLinkActive="app-header__nav-link--active">Articles</a>
     <a mat-button routerLink="/write" routerLinkActive="app-header__nav-link--active">Écrire</a>
     <a mat-button routerLink="/themes" routerLinkActive="app-header__nav-link--active">Thèmes</a>
@@ -8,4 +9,9 @@
   </nav>
   <button mat-stroked-button (click)="onLogout()">Se déconnecter</button>
 </header>
-<router-outlet></router-outlet>
+<main class="app-main" id="main-content">
+  <router-outlet></router-outlet>
+</main>
+<footer *ngIf="isLoggedIn$ | async" class="app-footer">
+  <span>Monde De Dev &copy; {{ year }}</span>
+</footer>

@@ -1,7 +1,7 @@
 <div class="feed">
   <h1 class="feed__title">Mon fil d'actualité</h1>
 
-  <div *ngIf="isLoading" class="feed__loading">Chargement…</div>
+  <div *ngIf="isLoading" class="feed__loading" aria-live="polite" aria-busy="true">Chargement…</div>
 
   <div *ngIf="!isLoading && posts.length === 0" class="feed__empty">
     <p>Aucun article à afficher.</p>
@@ -9,20 +9,25 @@
   </div>
 
   <div *ngIf="!isLoading && posts.length > 0" class="feed__toolbar">
-    <button mat-stroked-button (click)="toggleOrder()">
+    <button
+      mat-stroked-button
+      (click)="toggleOrder()"
+      [attr.aria-label]="order === 'desc' ? 'Trier du plus ancien au plus récent' : 'Trier du plus récent au plus ancien'">
       {{ order === 'desc' ? '↑ Plus anciens en premier' : '↓ Plus récents en premier' }}
     </button>
   </div>
 
   <ul *ngIf="!isLoading && posts.length > 0" class="feed__list">
     <li *ngFor="let post of posts" class="feed__card">
-      <div class="feed__card-meta">
-        <span class="feed__card-topic">{{ post.topicName }}</span>
-        <span class="feed__card-date">{{ post.createdAt | date:'d MMM yyyy' }}</span>
-      </div>
-      <h2 class="feed__card-title">{{ post.title }}</h2>
-      <p class="feed__card-author">Par {{ post.authorUsername }}</p>
-      <p class="feed__card-excerpt">{{ post.content | slice:0:200 }}{{ post.content.length > 200 ? '…' : '' }}</p>
+      <a class="feed__card-link" [routerLink]="['/articles', post.id]">
+        <div class="feed__card-meta">
+          <span class="feed__card-topic">{{ post.topicName }}</span>
+          <span class="feed__card-date">{{ post.createdAt | date:'d MMM yyyy' }}</span>
+        </div>
+        <h2 class="feed__card-title">{{ post.title }}</h2>
+        <p class="feed__card-author">Par {{ post.authorUsername }}</p>
+        <p class="feed__card-excerpt">{{ post.content | slice:0:200 }}{{ post.content.length > 200 ? '…' : '' }}</p>
+      </a>
     </li>
   </ul>
 </div>

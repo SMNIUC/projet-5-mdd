@@ -2,6 +2,11 @@
   max-width: 700px;
   margin: 40px auto;
   padding: 0 24px;
+
+  @media (max-width: 600px) {
+    margin-top: 24px;
+    padding: 0 16px;
+  }
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -51,6 +56,24 @@
     color: #1a1a2e;
   }
 
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  &__success {
+    font-size: 0.9rem;
+    color: #388e3c;
+    margin-top: 4px;
+  }
+
   &__empty {
     color: #666;
   }
@@ -73,6 +96,11 @@
     border-radius: 8px;
     background: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   &__topic-info {

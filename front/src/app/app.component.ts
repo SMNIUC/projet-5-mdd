@@ -9,6 +9,7 @@ import { AuthService } from './core/services/auth.service';
 })
 export class AppComponent {
   readonly isLoggedIn$: Observable<boolean>;
+  readonly year = new Date().getFullYear();
 
   constructor(private authService: AuthService) {
     this.isLoggedIn$ = authService.isLoggedIn$;

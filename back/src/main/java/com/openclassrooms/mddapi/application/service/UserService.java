@@ -5,6 +5,8 @@ import com.openclassrooms.mddapi.exception.EmailAlreadyExistsException;
 import com.openclassrooms.mddapi.exception.UsernameAlreadyExistsException;
 import com.openclassrooms.mddapi.infrastructure.repository.UserRepository;
 import com.openclassrooms.mddapi.presentation.dto.RegisterRequest;
+import com.openclassrooms.mddapi.presentation.dto.UpdateUserRequest;
+import com.openclassrooms.mddapi.presentation.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,6 +37,38 @@ public class UserService implements UserDetailsService {
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
             .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+    }
+
+    public UserResponse updateUser(String currentEmail, UpdateUserRequest request) {
+        User user = userRepository.findByEmail(currentEmail)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found: " + currentEmail));
+
+        if (request.getEmail() != null && !request.getEmail().isBlank()
+                && !request.getEmail().equalsIgnoreCase(user.getEmail())) {
+            if (userRepository.existsByEmail(request.getEmail())) {
+                throw new EmailAlreadyExistsException("Email already in use");
+            }
+            user.setEmail(request.getEmail());
+        }
+
+        if (request.getUsername() != null && !request.getUsername().isBlank()
+                && !request.getUsername().equalsIgnoreCase(user.getUsername())) {
+            if (userRepository.existsByUsername(request.getUsername())) {
+                throw new UsernameAlreadyExistsException("Username already in use");
+            }
+            user.setUsername(request.getUsername());
+        }
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        User saved = userRepository.save(user);
+        return UserResponse.builder()
+            .id(saved.getId())
+            .email(saved.getEmail())
+            .username(saved.getUsername())
+            .build();
     }
 
     public User register(RegisterRequest request) {

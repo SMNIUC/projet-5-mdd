@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CreatePostRequest, Post } from '../models/post.model';
+import { Comment, CreateCommentRequest, CreatePostRequest, Post, PostDetail } from '../models/post.model';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
@@ -14,6 +14,14 @@ export class PostService {
       params: { order },
       withCredentials: true,
     });
+  }
+
+  getById(id: number): Observable<PostDetail> {
+    return this.http.get<PostDetail>(`${this.API}/${id}`, { withCredentials: true });
+  }
+
+  addComment(postId: number, request: CreateCommentRequest): Observable<Comment> {
+    return this.http.post<Comment>(`${this.API}/${postId}/comments`, request, { withCredentials: true });
   }
 
   create(request: CreatePostRequest): Observable<Post> {

@@ -7,6 +7,7 @@ import { FeedComponent } from './features/feed/feed.component';
 import { ThemesComponent } from './features/themes/themes.component';
 import { ProfileComponent } from './features/profile/profile.component';
 import { WriteArticleComponent } from './features/article/write-article/write-article.component';
+import { ReadArticleComponent } from './features/article/read-article/read-article.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'themes', component: ThemesComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'write', component: WriteArticleComponent },
+  { path: 'articles/:id', component: ReadArticleComponent },
 ];
 
 @NgModule({

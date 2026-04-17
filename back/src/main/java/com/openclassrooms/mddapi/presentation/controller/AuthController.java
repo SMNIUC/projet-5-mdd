@@ -6,10 +6,12 @@ import com.openclassrooms.mddapi.presentation.dto.AuthResponse;
 import com.openclassrooms.mddapi.presentation.dto.LoginRequest;
 import com.openclassrooms.mddapi.presentation.dto.RegisterRequest;
 import com.openclassrooms.mddapi.security.JwtService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +30,9 @@ public class AuthController {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    @Value("${app.cookie.secure:false}")
+    private boolean cookieSecure;
+
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request,
@@ -35,7 +40,7 @@ public class AuthController {
 
         User user = userService.register(request);
         String token = jwtService.generateToken(user.getEmail());
-        addJwtCookie(response, token);
+        writeJwtCookie(response, token, 86400);
 
         return ResponseEntity.ok(new AuthResponse("Registration successful"));
     }
@@ -50,26 +55,25 @@ public class AuthController {
         );
 
         String token = jwtService.generateToken(auth.getName());
-        addJwtCookie(response, token);
+        writeJwtCookie(response, token, 86400);
 
         return ResponseEntity.ok(new AuthResponse("Login successful"));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<AuthResponse> logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("jwt", null);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        writeJwtCookie(response, "", 0);
         return ResponseEntity.ok(new AuthResponse("Logout successful"));
     }
 
-    private void addJwtCookie(HttpServletResponse response, String token) {
-        Cookie cookie = new Cookie("jwt", token);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(86400);
-        response.addCookie(cookie);
+    private void writeJwtCookie(HttpServletResponse response, String value, long maxAge) {
+        ResponseCookie cookie = ResponseCookie.from("jwt", value)
+            .httpOnly(true)
+            .secure(cookieSecure)
+            .path("/")
+            .maxAge(maxAge)
+            .sameSite("Strict")
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 }

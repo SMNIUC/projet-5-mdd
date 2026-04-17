@@ -1,14 +1,19 @@
 package com.openclassrooms.mddapi.application.service;
 
+import com.openclassrooms.mddapi.domain.model.Comment;
 import com.openclassrooms.mddapi.domain.model.Post;
 import com.openclassrooms.mddapi.domain.model.Topic;
 import com.openclassrooms.mddapi.domain.model.User;
+import com.openclassrooms.mddapi.exception.PostNotFoundException;
+import com.openclassrooms.mddapi.infrastructure.repository.CommentRepository;
 import com.openclassrooms.mddapi.infrastructure.repository.PostRepository;
 import com.openclassrooms.mddapi.infrastructure.repository.SubscriptionRepository;
 import com.openclassrooms.mddapi.infrastructure.repository.TopicRepository;
 import com.openclassrooms.mddapi.infrastructure.repository.UserRepository;
 import com.openclassrooms.mddapi.exception.TopicNotFoundException;
+import com.openclassrooms.mddapi.presentation.dto.CommentResponse;
 import com.openclassrooms.mddapi.presentation.dto.CreatePostRequest;
+import com.openclassrooms.mddapi.presentation.dto.PostDetailResponse;
 import com.openclassrooms.mddapi.presentation.dto.PostResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -25,6 +30,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
     private final TopicRepository topicRepository;
@@ -87,6 +93,44 @@ public class PostService {
             .authorUsername(user.getUsername())
             .topicName(topic.getName())
             .createdAt(saved.getCreatedAt())
+            .build();
+    }
+
+    public PostDetailResponse getPostById(Long postId) {
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new PostNotFoundException(postId));
+
+        String authorUsername = userRepository.findById(post.getAuthorId())
+            .map(User::getUsername)
+            .orElse("Inconnu");
+
+        String topicName = topicRepository.findById(post.getTopicId())
+            .map(Topic::getName)
+            .orElse("Inconnu");
+
+        List<Comment> comments = commentRepository.findByPostIdOrderByCreatedAtAsc(postId);
+
+        Set<Long> authorIds = comments.stream().map(Comment::getAuthorId).collect(Collectors.toSet());
+        Map<Long, String> usernameById = userRepository.findAllById(authorIds).stream()
+            .collect(Collectors.toMap(User::getId, User::getUsername));
+
+        List<CommentResponse> commentResponses = comments.stream()
+            .map(c -> CommentResponse.builder()
+                .id(c.getId())
+                .content(c.getContent())
+                .authorUsername(usernameById.getOrDefault(c.getAuthorId(), "Inconnu"))
+                .createdAt(c.getCreatedAt())
+                .build())
+            .collect(Collectors.toList());
+
+        return PostDetailResponse.builder()
+            .id(post.getId())
+            .title(post.getTitle())
+            .content(post.getContent())
+            .authorUsername(authorUsername)
+            .topicName(topicName)
+            .createdAt(post.getCreatedAt())
+            .comments(commentResponses)
             .build();
     }
 }

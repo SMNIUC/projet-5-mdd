@@ -2,16 +2,42 @@
 
   <section class="profile__info">
     <h1 class="profile__title">Mon profil</h1>
-    <div *ngIf="user" class="profile__fields">
-      <div class="profile__field">
-        <span class="profile__label">Nom d'utilisateur</span>
-        <span class="profile__value">{{ user.username }}</span>
+
+    <form *ngIf="editForm" [formGroup]="editForm" (ngSubmit)="onSave()" class="profile__form">
+      <mat-form-field appearance="outline" class="profile__field">
+        <mat-label>Nom d'utilisateur</mat-label>
+        <input matInput formControlName="username" />
+        <mat-error *ngIf="username.hasError('required')">Champ requis.</mat-error>
+        <mat-error *ngIf="username.hasError('minlength') || username.hasError('maxlength')">
+          Entre 3 et 50 caractères.
+        </mat-error>
+        <mat-error *ngIf="serverErrors['username']">{{ serverErrors['username'] }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="profile__field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" />
+        <mat-error *ngIf="email.hasError('required')">Champ requis.</mat-error>
+        <mat-error *ngIf="email.hasError('email')">Email invalide.</mat-error>
+        <mat-error *ngIf="serverErrors['email']">{{ serverErrors['email'] }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="profile__field">
+        <mat-label>Nouveau mot de passe</mat-label>
+        <input matInput formControlName="password" type="password" placeholder="Laisser vide pour ne pas changer" />
+        <mat-error *ngIf="password.hasError('pattern')">
+          Minimum 8 caractères avec majuscule, minuscule, chiffre et caractère spécial.
+        </mat-error>
+      </mat-form-field>
+
+      <div *ngIf="saveSuccess" class="profile__success" role="status" aria-live="polite">Profil mis à jour avec succès.</div>
+
+      <div class="profile__actions">
+        <button mat-flat-button color="primary" type="submit" [disabled]="editForm.invalid || isSaving">
+          Enregistrer
+        </button>
       </div>
-      <div class="profile__field">
-        <span class="profile__label">Email</span>
-        <span class="profile__value">{{ user.email }}</span>
-      </div>
-    </div>
+    </form>
   </section>
 
   <section class="profile__subscriptions">

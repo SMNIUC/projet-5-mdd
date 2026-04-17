@@ -1,0 +1,52 @@
+<div class="article">
+  <div *ngIf="isLoading" class="article__loading" aria-live="polite" aria-busy="true">Chargement…</div>
+
+  <div *ngIf="hasError" class="article__error" role="alert">Article introuvable.</div>
+
+  <ng-container *ngIf="!isLoading && !hasError && post">
+    <article>
+      <div class="article__meta">
+        <span class="article__topic">{{ post.topicName }}</span>
+        <span class="article__date">{{ post.createdAt | date:'d MMM yyyy' }}</span>
+      </div>
+
+      <h1 class="article__title">{{ post.title }}</h1>
+      <p class="article__author">Par {{ post.authorUsername }}</p>
+
+      <div class="article__content">{{ post.content }}</div>
+    </article>
+
+    <section class="article__comments" aria-label="Commentaires">
+      <h2 class="article__comments-title">Commentaires ({{ post.comments.length }})</h2>
+
+      <form [formGroup]="commentForm" (ngSubmit)="submitComment()" class="article__comment-form">
+        <mat-form-field appearance="outline" class="article__comment-field">
+          <mat-label>Ajouter un commentaire</mat-label>
+          <textarea matInput formControlName="content" rows="3" placeholder="Votre commentaire…"></textarea>
+          <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
+            Le commentaire ne peut pas être vide.
+          </mat-error>
+        </mat-form-field>
+        <div class="article__comment-actions">
+          <button mat-flat-button color="primary" type="submit" [disabled]="commentForm.invalid || isSubmitting">
+            Envoyer
+          </button>
+        </div>
+      </form>
+
+      <p *ngIf="post.comments.length === 0" class="article__comments-empty">
+        Aucun commentaire pour l'instant.
+      </p>
+
+      <ul class="article__comments-list">
+        <li *ngFor="let comment of post.comments" class="article__comment">
+          <div class="article__comment-header">
+            <span class="article__comment-author">{{ comment.authorUsername }}</span>
+            <span class="article__comment-date">{{ comment.createdAt | date:'d MMM yyyy' }}</span>
+          </div>
+          <p class="article__comment-content">{{ comment.content }}</p>
+        </li>
+      </ul>
+    </section>
+  </ng-container>
+</div>
